@@ -24,9 +24,16 @@ function App() {
   const [todoInput, setTodoInput] = useState('');
   const [idForTodo, setIdForTodo] = useState(4);
 
+  // Function that adds new tasks
   const addTodo = e => {
     e.preventDefault();
 
+    // Don´t continue if input is empty string
+    if (todoInput.trim().length === 0) {
+      return;
+    }
+
+    // Copy array and add a new task
     setTodos([
       ...todos,
       {
@@ -37,9 +44,11 @@ function App() {
     ]);
 
     setTodoInput('');
+    // Copy previouse idForTodo and increment + 1
     setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
   };
 
+  // Function that handles icomming inputs
   const handleInput = e => {
     setTodoInput(e.target.value);
   };
