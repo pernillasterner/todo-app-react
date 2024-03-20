@@ -21,13 +21,53 @@ function App() {
     },
   ]);
 
+  const [todoInput, setTodoInput] = useState('');
+  const [idForTodo, setIdForTodo] = useState(4);
+
+  // Function that adds new tasks
+  const addTodo = e => {
+    e.preventDefault();
+
+    // Don´t continue if input is empty string
+    if (todoInput.trim().length === 0) {
+      return;
+    }
+
+    // Copy array and add a new task
+    setTodos([
+      ...todos,
+      {
+        id: idForTodo,
+        title: todoInput,
+        isComplete: false,
+      },
+    ]);
+
+    setTodoInput('');
+    // Copy previouse idForTodo and increment + 1
+    setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
+  };
+
+  // Function that deletes tasks
+  const deleteTodo = id => {
+    // If todo contains a task with id then remove
+    setTodos([...todos].filter(todo => todo.id !== id));
+  };
+
+  // Function that handles icomming inputs
+  const handleInput = e => {
+    setTodoInput(e.target.value);
+  };
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
         <h2>Todo App</h2>
-        <form action="#">
+        <form action="#" onSubmit={addTodo}>
           <input
             type="text"
+            value={todoInput}
+            onChange={e => handleInput(e)}
             className="todo-input"
             placeholder="What do you need to do?"
           />
@@ -35,13 +75,13 @@ function App() {
 
         <ul className="todo-list">
           {todos.map((todo, index) => (
-            <li className="todo-item-container">
+            <li key={todo.id} className="todo-item-container">
               <div className="todo-item">
                 <input type="checkbox" />
                 <span className="todo-item-label">{todo.title}</span>
                 {/* <input type="text" className="todo-item-input" value="Finish React Series" /> */}
               </div>
-              <button className="x-button">
+              <button onClick={() => deleteTodo(todo.id)} className="x-button">
                 <svg
                   className="x-button-icon"
                   fill="none"
