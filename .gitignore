@@ -21,6 +21,7 @@ logg.md
 .vscode/*
 !.vscode/extensions.json
 .idea
+.prettierrc
 .DS_Store
 *.suo
 *.ntvs*
