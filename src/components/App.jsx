@@ -48,6 +48,12 @@ function App() {
     setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
   };
 
+  // Function that deletes tasks
+  const deleteTodo = id => {
+    // If todo contains a task with id then remove
+    setTodos([...todos].filter(todo => todo.id !== id));
+  };
+
   // Function that handles icomming inputs
   const handleInput = e => {
     setTodoInput(e.target.value);
@@ -69,13 +75,13 @@ function App() {
 
         <ul className="todo-list">
           {todos.map((todo, index) => (
-            <li key={index} className="todo-item-container">
+            <li key={todo.id} className="todo-item-container">
               <div className="todo-item">
                 <input type="checkbox" />
                 <span className="todo-item-label">{todo.title}</span>
                 {/* <input type="text" className="todo-item-input" value="Finish React Series" /> */}
               </div>
-              <button className="x-button">
+              <button onClick={() => deleteTodo(todo.id)} className="x-button">
                 <svg
                   className="x-button-icon"
                   fill="none"
