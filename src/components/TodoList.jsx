@@ -1,4 +1,7 @@
 import PropTypes from 'prop-types'
+import { TodoItemsRemaining } from './TodoItemsRemaining'
+import { TodoClearCompleted } from './TodoClearCompleted'
+import { TodoCompleteAll } from './TodoCompleteAll'
 
 export const TodoList = props => {
   return (
@@ -61,11 +64,9 @@ export const TodoList = props => {
       </ul>
 
       <div className="check-all-container">
-        <div>
-          <div className="button">Check All</div>
-        </div>
+        <TodoCompleteAll completeAllTodos={props.completeAllTodos} />
 
-        <span>3 items remaining</span>
+        <TodoItemsRemaining remainingTodos={props.remainingTodos} />
       </div>
 
       <div className="other-buttons-container">
@@ -77,7 +78,7 @@ export const TodoList = props => {
           <button className="button filter-button">Completed</button>
         </div>
         <div>
-          <button className="button">Clear completed</button>
+          <TodoClearCompleted clearCompleted={props.clearCompleted} />
         </div>
       </div>
     </>
@@ -91,4 +92,7 @@ TodoList.propTypes = {
   updateTodo: PropTypes.func.isRequired,
   cancelEdit: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
+  remainingTodos: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+  completeAllTodos: PropTypes.func.isRequired,
 }

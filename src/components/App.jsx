@@ -110,6 +110,25 @@ function App() {
     setTodos(updatedTodos)
   }
 
+  const remainingTodos = () => {
+    //HIGHLIGHT
+    return todos.filter(todo => !todo.isComplete).length
+  }
+
+  const clearCompleted = () => {
+    setTodos([...todos].filter(todo => !todo.isComplete))
+  }
+
+  const completeAllTodos = () => {
+    const updatedTodos = todos.map(todo => {
+      todo.isComplete = true
+
+      // Because it´s a map we have to return it
+      return todo
+    })
+    setTodos(updatedTodos)
+  }
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
@@ -123,6 +142,9 @@ function App() {
             updateTodo={updateTodo}
             cancelEdit={cancelEdit}
             deleteTodo={deleteTodo}
+            remainingTodos={remainingTodos}
+            clearCompleted={clearCompleted}
+            completeAllTodos={completeAllTodos}
           />
         ) : (
           <NoTodos />
