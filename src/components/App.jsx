@@ -1,6 +1,6 @@
-import '../reset.css';
-import '../App.css';
-import { useState } from 'react';
+import '../reset.css'
+import '../App.css'
+import { useState } from 'react'
 
 function App() {
   const [todos, setTodos] = useState([
@@ -8,29 +8,32 @@ function App() {
       id: 1,
       title: 'Finish React Series',
       isComplete: false,
+      isEditing: false,
     },
     {
       id: 2,
       title: 'Go Grocery',
       isComplete: true,
+      isEditing: false,
     },
     {
       id: 3,
       title: 'Take over world',
       isComplete: false,
+      isEditing: false,
     },
-  ]);
+  ])
 
-  const [todoInput, setTodoInput] = useState('');
-  const [idForTodo, setIdForTodo] = useState(4);
+  const [todoInput, setTodoInput] = useState('')
+  const [idForTodo, setIdForTodo] = useState(4)
 
   // Function that adds new tasks
   const addTodo = e => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Don´t continue if input is empty string
     if (todoInput.trim().length === 0) {
-      return;
+      return
     }
 
     // Copy array and add a new task
@@ -41,23 +44,68 @@ function App() {
         title: todoInput,
         isComplete: false,
       },
-    ]);
+    ])
 
-    setTodoInput('');
+    setTodoInput('')
     // Copy previouse idForTodo and increment + 1
-    setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
-  };
+    setIdForTodo(prevIdForTodo => prevIdForTodo + 1)
+  }
 
   // Function that deletes tasks
   const deleteTodo = id => {
     // If todo contains a task with id then remove
-    setTodos([...todos].filter(todo => todo.id !== id));
-  };
+    setTodos([...todos].filter(todo => todo.id !== id))
+  }
+
+  const completeTodo = id => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.isComplete = !todo.isComplete
+      }
+      // Because it´s a map we have to return it
+      return todo
+    })
+
+    setTodos(updatedTodos)
+  }
+
+  const markAsEditing = id => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.isEditing = !todo.isEditing
+      }
+      // Because it´s a map we have to return it
+      return todo
+    })
+
+    setTodos(updatedTodos)
+  }
+
+  const updateTodo = (e, id) => {
+    // Find the todo with corresponding id
+    // Update the description
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        // Don´t continue if input is empty string
+        if (e.target.value.trim().length === 0) {
+          todo.isEditing = false
+          return todo
+        }
+
+        todo.title = e.target.value
+        todo.isEditing = false
+      }
+      // Because it´s a map we have to return it
+      return todo
+    })
+
+    setTodos(updatedTodos)
+  }
 
   // Function that handles icomming inputs
   const handleInput = e => {
-    setTodoInput(e.target.value);
-  };
+    setTodoInput(e.target.value)
+  }
 
   return (
     <div className="todo-app-container">
@@ -77,9 +125,34 @@ function App() {
           {todos.map((todo, index) => (
             <li key={todo.id} className="todo-item-container">
               <div className="todo-item">
-                <input type="checkbox" />
-                <span className="todo-item-label">{todo.title}</span>
-                {/* <input type="text" className="todo-item-input" value="Finish React Series" /> */}
+                <input
+                  type="checkbox"
+                  onChange={() => completeTodo(todo.id)}
+                  checked={todo.isComplete ? true : false}
+                />
+                {!todo.isEditing ? (
+                  <span
+                    onDoubleClick={() => markAsEditing(todo.id)}
+                    className={`todo-item-label ${
+                      todo.isComplete ? 'line-through' : ''
+                    }`}
+                  >
+                    {todo.title}
+                  </span>
+                ) : (
+                  <input
+                    type="text"
+                    onBlur={e => updateTodo(e, todo.id)}
+                    onKeyDown={event => {
+                      if (event.key === 'Enter') {
+                        updateTodo(event, todo.id)
+                      }
+                    }}
+                    className="todo-item-input"
+                    defaultValue={todo.title}
+                    autoFocus
+                  />
+                )}
               </div>
               <button onClick={() => deleteTodo(todo.id)} className="x-button">
                 <svg
@@ -122,7 +195,7 @@ function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
