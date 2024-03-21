@@ -72,8 +72,9 @@ function App() {
   const markAsEditing = id => {
     const updatedTodos = todos.map(todo => {
       if (todo.id === id) {
-        todo.isEditing = !todo.isEditing
+        todo.isEditing = true
       }
+
       // Because it´s a map we have to return it
       return todo
     })
@@ -95,6 +96,19 @@ function App() {
         todo.title = e.target.value
         todo.isEditing = false
       }
+      // Because it´s a map we have to return it
+      return todo
+    })
+
+    setTodos(updatedTodos)
+  }
+
+  const cancelEdit = (e, id) => {
+    const updatedTodos = todos.map(todo => {
+      if (todo.id === id) {
+        todo.isEditing = false
+      }
+
       // Because it´s a map we have to return it
       return todo
     })
@@ -143,9 +157,11 @@ function App() {
                   <input
                     type="text"
                     onBlur={e => updateTodo(e, todo.id)}
-                    onKeyDown={event => {
-                      if (event.key === 'Enter') {
-                        updateTodo(event, todo.id)
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        updateTodo(e, todo.id)
+                      } else if (e.key === 'Escape') {
+                        cancelEdit(e, todo.id)
                       }
                     }}
                     className="todo-item-input"
