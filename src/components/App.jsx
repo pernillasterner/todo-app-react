@@ -1,12 +1,13 @@
 import '../reset.css'
 import '../App.css'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { NoTodos } from './NoTodos'
 import { TodoForm } from './TodoForm'
 import { TodoList } from './TodoList'
 
 function App() {
   const [name, setName] = useState('')
+  const nameInputEl = useRef(null)
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -146,9 +147,12 @@ function App() {
       <div className="todo-app">
         <div className="name-container">
           <h2>What is your name?</h2>
+          <button onClick={() => nameInputEl.current.focus()}>Get Ref</button>
           <form action="#">
             <input
               type="text"
+              // HIGHLIGHT useRef(null)
+              ref={nameInputEl}
               className="todo-input"
               placeholder="What is your name?"
               value={name}
