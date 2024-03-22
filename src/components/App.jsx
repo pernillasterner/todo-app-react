@@ -6,6 +6,7 @@ import { TodoForm } from './TodoForm'
 import { TodoList } from './TodoList'
 
 function App() {
+  const [name, setName] = useState('')
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -129,8 +130,8 @@ function App() {
     setTodos(updatedTodos)
   }
 
+  // Function that handle filters
   const todosFiltered = filter => {
-    console.log(filter)
     if (filter === 'all') {
       return todos
     } else if (filter === 'active') {
@@ -143,6 +144,19 @@ function App() {
   return (
     <div className="todo-app-container">
       <div className="todo-app">
+        <div className="name-container">
+          <h2>What is your name?</h2>
+          <form action="#">
+            <input
+              type="text"
+              className="todo-input"
+              placeholder="What is your name?"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </form>
+          {name && <p className="name-label">Hello, {name}</p>}
+        </div>
         <h2>Todo App</h2>
         <TodoForm addTodo={addTodo} />
         {todos.length > 0 ? (
