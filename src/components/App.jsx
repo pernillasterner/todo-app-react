@@ -1,6 +1,6 @@
 import '../reset.css'
 import '../App.css'
-import { useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { NoTodos } from './NoTodos'
 import { TodoForm } from './TodoForm'
 import { TodoList } from './TodoList'
@@ -112,10 +112,14 @@ function App() {
     setTodos(updatedTodos)
   }
 
-  const remainingTodos = () => {
-    //HIGHLIGHT
+  // Function that calc the remaining todos. This is slow
+  const remainingCalculation = () => {
+    //HIGHLIGHT useMemo if something is slow
+    // for (let index = 0; index < 200000000000; index++) {}
     return todos.filter(todo => !todo.isComplete).length
   }
+
+  const remainingTodos = useMemo(remainingCalculation, [todos])
 
   const clearCompleted = () => {
     setTodos([...todos].filter(todo => !todo.isComplete))
@@ -142,12 +146,20 @@ function App() {
     }
   }
 
+  // When app mounts focus on name input
+  useEffect(() => {
+    nameInputEl.current.focus()
+
+    return () => {
+      console.log('cleanup ') // Run a clean up
+    }
+  }, [])
+
   return (
     <div className="todo-app-container">
       <div className="todo-app">
         <div className="name-container">
           <h2>What is your name?</h2>
-          <button onClick={() => nameInputEl.current.focus()}>Get Ref</button>
           <form action="#">
             <input
               type="text"
